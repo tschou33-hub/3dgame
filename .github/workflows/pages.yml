@@ -1,20 +1,16 @@
 name: Deploy Godot Web build to GitHub Pages
-
 on:
   push:
     branches: [main]
     paths:
-      - "3dgame-upload.zip"
+      - "web/3dgame-upload.zip"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
-
 permissions:
   contents: read
-
 concurrency:
   group: github-pages
   cancel-in-progress: true
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -24,17 +20,15 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Extract game project
-        run: unzip -q 3dgame-upload.zip -d extracted
+        run: unzip -q web/3dgame-upload.zip -d extracted
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v4
         with:
           path: extracted/web
-
   deploy:
     needs: build
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
